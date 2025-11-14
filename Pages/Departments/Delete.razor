@@ -1,0 +1,41 @@
+﻿@page "/departments/delete/{Id:guid}"
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using EmployesManagementSystemFront.Models
+
+<h3 class="text-danger">Delete Department</h3>
+
+@if (department == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>Are you sure you want to delete <strong>@department.Name</strong>?</p>
+    <div class="d-flex gap-2">
+        <button class="btn btn-danger" @onclick="DeleteDepartment">Yes, Delete</button>
+        <a class="btn btn-outline-secondary" href="/departments">Cancel</a>
+    </div>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    private DepartamentResponce? department;
+
+    protected override async Task OnInitializedAsync()
+    {
+        department = await Http.GetFromJsonAsync<DepartamentResponce>(
+            $"http://localhost:5203/api/Department/GetById?id={Id}");
+    }
+
+    private async Task DeleteDepartment()
+    {
+        var res = await Http.DeleteAsync($"http://localhost:5203/api/Department/Delete?id={Id}");
+
+        if (res.IsSuccessStatusCode)
+            Nav.NavigateTo("/departments");
+        else
+            Console.WriteLine("Delete failed: " + await res.Content.ReadAsStringAsync());
+    }
+
+}

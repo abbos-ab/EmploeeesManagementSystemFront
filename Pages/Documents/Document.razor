@@ -1,0 +1,81 @@
+﻿@page "/document"
+@inject HttpClient Http
+@using EmployesManagementSystemFront.Models
+<h3>Send Document</h3>
+
+<select @bind="selectedUserId">
+    <option value="">-- Select User --</option>
+    @foreach (var user in users)
+    {
+        <option value="@user.Id">@user.Name</option>
+    }
+</select>
+
+<InputFile OnChange="HandleFileSelected" />
+
+<button @onclick="SendDocument" disabled="@(!canSend)">Send Document</button>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <p>@message</p>
+}
+
+@code {
+    private List<User> users = new();
+    private Guid selectedUserId;
+    private IBrowserFile selectedFile;
+    private string message;
+    private bool canSend => selectedFile != null && selectedUserId != Guid.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Backend User Controller bilan mos
+        users = await Http.GetFromJsonAsync<List<User>>("api/User/GetAll");
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+    }
+
+    private async Task SendDocument()
+    {
+        if (selectedFile == null || selectedUserId == Guid.Empty)
+        {
+            message = "Please select a user and a file.";
+            return;
+        }
+
+        try
+        {
+            // Faylni Upload qilish
+            var content = new MultipartFormDataContent();
+            var fileStream = selectedFile.OpenReadStream(10 * 1024 * 1024); // 10 MB limit
+            content.Add(new StreamContent(fileStream), "formFile", selectedFile.Name);
+
+            var uploadResponse = await Http.PostAsync("api/Document/UpLoad", content);
+            if (!uploadResponse.IsSuccessStatusCode)
+            {
+                message = "File upload failed.";
+                return;
+            }
+
+            var uploadResult = await uploadResponse.Content.ReadAsStringAsync();
+            if (uploadResult.ToLower() != "true")
+            {
+                message = "File upload failed on server.";
+                return;
+            }
+
+            // Faylni yuborish
+            // Eslatma: Backend `Send` metodida document ID kerak, lekin sizning backend hozirda ID olishga imkon bermaydi
+            // Shu sababli, agar siz document ID serverda saqlash va olishni xohlamasangiz,
+            // siz `Send` metodini chaqira olmaysiz to‘g‘ridan-to‘g‘ri (faqat upload bo‘ladi)
+            message = "File uploaded successfully. Document sending requires ID, backend returns only bool.";
+        }
+        catch (Exception ex)
+        {
+            message = $"Error: {ex.Message}";
+        }
+    }
+}

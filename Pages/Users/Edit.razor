@@ -1,0 +1,118 @@
+﻿@page "/edit/{Id}"
+@inject HttpClient Http
+@inject NavigationManager navManager
+@using EmployesManagementSystemFront.Models
+@using System.Text.Json.Nodes
+
+<h1 class="mb-5">Edit User</h1>
+
+@if (UserData == null)
+{
+    <p><em>Loading user data...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">Name</label>
+                <div class="col-md-8">
+                    <input class="form-control" @bind="UserData.Name" />
+                    <span class="text-danger">@Errors["Name"]?[0]</span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">Email</label>
+                <div class="col-md-8">
+                    <input class="form-control" @bind="UserData.Email" />
+                    <span class="text-danger">@Errors["Email"]?[0]</span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">Password</label>
+                <div class="col-md-8">
+                    <input class="form-control" type="password" @bind="UserData.Password" />
+                    <span class="text-danger">@Errors["Password"]?[0]</span>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <div class="alert alert-success">@message</div>
+            }
+
+            <div class="row">
+                <div class="offset-md-4 col-md-4 d-grid">
+                    <button class="btn btn-primary" @onclick="UpdateUser">Save Changes</button>
+                </div>
+                <div class="col-md-4 d-grid">
+                    <a class="btn btn-outline-secondary" href="/users">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+@using System.Text.Json;
+@code {
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    public UserDto? UserData { get; set; }
+    public JsonNode Errors { get; set; } = new JsonObject();
+    string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            UserData = await Http.GetFromJsonAsync<UserDto>(
+                $"http://localhost:5203/api/User/GetById?id={Id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error loading user: " + ex.Message);
+        }
+    }
+
+
+    private async Task UpdateUser()
+    {
+        try
+        {
+            var response = await Http.PutAsJsonAsync(
+                $"http://localhost:5203/api/User/Update?id={Id}", UserData);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                UserData = JsonSerializer.Deserialize<UserDto>(
+                    content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                message = "✅ User updated successfully!";
+                navManager.NavigateTo("/users");
+            }
+            else
+            {
+                try
+                {
+                    var json = JsonNode.Parse(content);
+                    Errors = json?["errors"] ?? new JsonObject();
+                }
+                catch
+                {
+                    Console.WriteLine($"Update failed: {content}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating user: {ex.Message}");
+        }
+    }
+}
+

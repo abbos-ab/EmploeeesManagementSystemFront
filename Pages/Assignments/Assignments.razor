@@ -1,0 +1,172 @@
+﻿@page "/assignments"
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using EmployesManagementSystemFront.Models
+
+<h1 class="mb-4">User Assignments Management</h1>
+
+<div class="mb-4">
+    <h5>Assign User to Department & Role</h5>
+    <div class="row g-2">
+        <div class="col-md-3">
+            <select class="form-select" @bind="selectedUserId">
+                <option value="">-- Select User --</option>
+                @foreach (var u in users)
+                {
+                    <option value="@u.Id">@u.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-select" @bind="selectedDepartmentId">
+                <option value="">-- Select Department --</option>
+                @foreach (var d in departments)
+                {
+                    <option value="@d.Id">@d.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-select" @bind="selectedRoleId">
+                <option value="">-- Select Role --</option>
+                @foreach (var r in roles)
+                {
+                    <option value="@r.Id">@r.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3 d-grid">
+            <button class="btn btn-primary" @onclick="AssignUser" disabled="@isSaving">
+                @if (isSaving)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                    }
+                else
+                {
+                    <span>Assign</span>
+                }
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<h4 class="mt-4">Existing Assignments</h4>
+
+@if (assignments == null)
+{
+    <p><em>Loading assignments...</em></p>
+}
+else if (assignments.Count == 0)
+{
+    <p>No assignments yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Department</th>
+                <th>Role</th>
+                <th style="width: 100px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in assignments)
+            {
+                <tr>
+                    <td>@GetUserName(a.IdUser)</td>
+                    <td>@GetDepartmentName(a.IdDeportment)</td>
+                    <td>@GetRoleName(a.IdRole)</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" @onclick="() => UnAssign(a.Id)">Unassign</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<UserDto> users = new();
+    private List<DepartamentResponce> departments = new();
+    private List<RoleDTO> roles = new();
+    private List<AssignmentsResponce> assignments = new();
+
+    private Guid selectedUserId;
+    private Guid selectedDepartmentId;
+    private Guid selectedRoleId;
+    private string message = "";
+    private bool isSaving = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<UserDto>>("http://localhost:5203/api/User/GetAll");
+        departments = await Http.GetFromJsonAsync<List<DepartamentResponce>>("http://localhost:5203/api/Department/GetAll");
+        roles = await Http.GetFromJsonAsync<List<RoleDTO>>("http://localhost:5203/api/Role/GetAll");
+        await LoadAssignments();
+    }
+
+    private async Task LoadAssignments()
+    {
+        assignments = await Http.GetFromJsonAsync<List<AssignmentsResponce>>("http://localhost:5203/api/Assignments/GetAll");
+    }
+
+    private string GetUserName(Guid id) => users.FirstOrDefault(u => u.Id == id)?.Name ?? "Unknown";
+    private string GetDepartmentName(Guid id) => departments.FirstOrDefault(d => d.Id == id)?.Name ?? "Unknown";
+    private string GetRoleName(Guid id) => roles.FirstOrDefault(r => r.Id == id)?.Name ?? "Unknown";
+
+    private async Task AssignUser()
+    {
+        if (selectedUserId == Guid.Empty || selectedDepartmentId == Guid.Empty || selectedRoleId == Guid.Empty)
+        {
+            message = "❌ Please select all fields!";
+            return;
+        }
+
+        isSaving = true;
+
+        var content = new MultipartFormDataContent
+        {
+            { new StringContent(selectedUserId.ToString()), "IdUser" },
+            { new StringContent(selectedDepartmentId.ToString()), "IdDeportment" },
+            { new StringContent(selectedRoleId.ToString()), "IdRole" }
+        };
+
+        var res = await Http.PostAsync("http://localhost:5203/api/Assignments/Assign", content);
+
+        if (res.IsSuccessStatusCode)
+        {
+            message = "✅ Assignment created successfully!";
+            await LoadAssignments();
+        }
+        else
+        {
+            message = "❌ Failed to assign user!";
+        }
+
+        isSaving = false;
+    }
+
+    private async Task UnAssign(Guid id)
+    {
+        var res = await Http.DeleteAsync($"http://localhost:5203/api/Assignments/UnAssign?id={id}");
+        if (res.IsSuccessStatusCode)
+        {
+            await LoadAssignments();
+            message = "✅ Assignment removed successfully!";
+        }
+        else
+        {
+            message = "❌ Failed to unassign!";
+        }
+    }
+}

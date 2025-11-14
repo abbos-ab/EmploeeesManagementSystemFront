@@ -1,0 +1,53 @@
+﻿@page "/departments/edit/{Id:guid}"
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using EmployesManagementSystemFront.Models
+<h1 class="mb-4">Edit Department</h1>
+
+@if (department == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="mb-3">
+        <label class="form-label">Department Name</label>
+        <input class="form-control" @bind="department.Name" />
+    </div>
+
+    <div class="d-flex gap-2">
+        <button class="btn btn-primary" @onclick="UpdateDepartment">Save Changes</button>
+        <a class="btn btn-outline-secondary" href="/departments">Cancel</a>
+    </div>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    private DepartamentResponce? department;
+
+    protected override async Task OnInitializedAsync()
+    {
+        department = await Http.GetFromJsonAsync<DepartamentResponce>(
+            $"http://localhost:5203/api/Department/GetById?id={Id}");
+    }
+
+    private async Task UpdateDepartment()
+    {
+        var content = new MultipartFormDataContent
+        {
+            { new StringContent(Id.ToString()), "id" },
+            { new StringContent(department?.Name ?? ""), "name" }
+        };
+
+        var res = await Http.PutAsync("http://localhost:5203/api/Department/Update", content);
+
+        if (res.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo("/departments");
+        }
+        else
+        {
+            Console.WriteLine("Update failed");
+        }
+    }
+}

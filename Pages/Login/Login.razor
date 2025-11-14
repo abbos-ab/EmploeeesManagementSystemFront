@@ -1,0 +1,65 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h3>Login</h3>
+
+<div style="width: 300px;">
+    <div>
+        <label>Email:</label><br />
+        <input @bind="email" class="form-control" />
+    </div>
+
+    <div class="mt-2">
+        <label>Password:</label><br />
+        <input type="password" @bind="password" class="form-control" />
+    </div>
+
+    <button @onclick="LoginAsync" class="btn btn-primary mt-3 w-100">Login</button>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <p style="color:red">@message</p>
+    }
+</div>
+
+@code {
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private string message = string.Empty;
+
+    private async Task LoginAsync()
+    {
+        try
+        {
+            var request = new
+            {
+                Email = email,
+                Password = password
+            };
+
+            var response = await Http.PostAsJsonAsync("http://localhost:5203/api/Auth/Login", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var token = await response.Content.ReadAsStringAsync();
+
+                // token ni saqlaymiz (oddiy localStorage)
+                await JS.InvokeVoidAsync("localStorage.setItem", "token", token.Replace("\"", ""));
+
+                Nav.NavigateTo("/document", true);
+            }
+            else
+            {
+                message = "Email yoki parol xato!";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = "Server bilan aloqa yo‘q: " + ex.Message;
+        }
+    }
+
+    [Inject]
+    public IJSRuntime JS { get; set; } = default!;
+}

@@ -1,0 +1,73 @@
+﻿@page "/users"
+@using EmployesManagementSystemFront.Models
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<h1 class="text-center mb-3">List of Users</h1>
+<a class="btn btn-primary mb-3" href="/create">New User</a>
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th style="width:150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary me-2" href="/edit/@user.Id">Edit</a>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteUser(user.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<User>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<User>>("http://localhost:5203/api/User/GetAll");
+    }
+
+    private async Task DeleteUser(Guid id)
+    {
+        if (!await ConfirmDelete()) return;
+
+        var response = await Http.DeleteAsync($"http://localhost:5203/api/User/Delete?id={id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var userToRemove = users?.FirstOrDefault(u => u.Id == id);
+            if (userToRemove != null)
+            {
+                users!.Remove(userToRemove);
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Delete failed: " + msg);
+        }
+    }
+
+    private async Task<bool> ConfirmDelete()
+    {
+        return await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this user?");
+    }
+}

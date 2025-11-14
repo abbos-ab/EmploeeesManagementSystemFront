@@ -1,0 +1,83 @@
+﻿@page "/create"
+@inject NavigationManager navManager
+@using System.Text.Json.Nodes
+@using EmployesManagementSystemFront.Models
+@inject HttpClient Http
+
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mb-5">Create New User</h1>
+
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">Name</label>
+            <div class="col-md-8">
+                <input class="form-control" @bind="UserData.Name">
+                <span class="text-danger">@Errors["Name"]?[0]</span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">Email</label>
+            <div class="col-md-8">
+                <input class="form-control" @bind="UserData.Email">
+                <span class="text-danger">@Errors["Email"]?[0]</span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">Password</label>
+            <div class="col-md-8">
+                <input class="form-control" @bind="UserData.Password">
+                <span class="text-danger">@Errors["Password"]?[0]</span>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-success">@message</div>
+        }
+
+        <div class="row">
+            <div class="offset-md-4 col-md-4 d-grid">
+                <button class="btn btn-primary" @onclick="SaveUser">Create</button>
+
+            </div>
+            <div class="col-md-4 d-grid">
+                <a class="btn btn-outline-primary" href="/users">Cancel</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+@code {
+    public UserDto UserData { get; set; } = new();
+    public JsonNode Errors { set; get; } = new JsonObject();
+    string message = "";
+    private async Task SaveUser()
+    {
+        var response = await Http.PostAsJsonAsync("http://localhost:5203/api/User/Registration", UserData);
+        if (response.IsSuccessStatusCode)
+        {
+            UserData = new UserDto();
+            message = "User created successfully!";
+            StateHasChanged();
+            await Task.Delay(500);
+            navManager.NavigateTo("/users");
+        }
+        else
+        {
+            var strResponce = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Json Responce: \n" + strResponce);
+
+            try
+            {
+                var jsonResponce = JsonNode.Parse(strResponce);
+                Errors = jsonResponce?["errors"] ?? new JsonObject();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error parsing JSON response: " + ex.Message);
+            }
+
+        }
+    }
+}

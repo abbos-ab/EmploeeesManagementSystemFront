@@ -1,0 +1,14 @@
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <p class="text-danger">Sizga bu sahifaga kirish taqiqlangan. Iltimos, login qiling.</p>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <p>Sahifa topilmadi.</p>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
