@@ -1,6 +1,6 @@
 ﻿@page "/document"
+@attribute [Authorize]
 @inject HttpClient Http
-@using EmployesManagementSystemFront.Models
 <h3>Send Document</h3>
 
 <select @bind="selectedUserId">

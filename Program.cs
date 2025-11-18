@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.JSInterop;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using EmployesManagementSystemFront.Providers;
+using EmployesManagementSystemFront.Services;
+using EmployesManagementSystemFront.Authorization;
 
 namespace EmployesManagementSystemFront
 {
@@ -16,6 +20,28 @@ namespace EmployesManagementSystemFront
             {
                 BaseAddress = new Uri("http://localhost:5203/")
             });
+
+            // Add Blazored LocalStorage
+            builder.Services.AddBlazoredLocalStorage();
+
+            // Add Authentication and Authorization services
+            builder.Services.AddAuthorizationCore(options =>
+            {
+                // Define role-based policies
+                options.AddPolicy(Policies.RequireSuperAdminRole, policy => 
+                    policy.RequireRole(Roles.SuperAdmin));
+                
+                options.AddPolicy(Policies.RequireAdminRole, policy => 
+                    policy.RequireRole(Roles.Admin, Roles.SuperAdmin));
+                
+                options.AddPolicy(Policies.RequireUserRole, policy => 
+                    policy.RequireRole(Roles.User, Roles.Admin, Roles.SuperAdmin));
+            });
+            
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+            
+            // Add custom services
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             await builder.Build().RunAsync();
         }

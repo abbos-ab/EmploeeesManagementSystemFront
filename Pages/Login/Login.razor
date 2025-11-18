@@ -1,65 +1,90 @@
-﻿@page "/"
-@inject HttpClient Http
+@page "/"
+@using EmployesManagementSystemFront.Services
+@inject IAuthService AuthService
 @inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
 
-<h3>Login</h3>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Login</h3>
 
-<div style="width: 300px;">
-    <div>
-        <label>Email:</label><br />
-        <input @bind="email" class="form-control" />
+                    <EditForm Model="@loginModel" OnValidSubmit="LoginAsync">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <InputText @bind-Value="loginModel.Email" class="form-control" placeholder="Enter your email" />
+                            <ValidationMessage For="@(() => loginModel.Email)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password:</label>
+                            <InputText type="password" @bind-Value="loginModel.Password" class="form-control" placeholder="Enter your password" />
+                            <ValidationMessage For="@(() => loginModel.Password)" />
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @errorMessage
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span>Logging in...</span>
+                            }
+                            else
+                            {
+                                <span>Login</span>
+                            }
+                        </button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mt-2">
-        <label>Password:</label><br />
-        <input type="password" @bind="password" class="form-control" />
-    </div>
-
-    <button @onclick="LoginAsync" class="btn btn-primary mt-3 w-100">Login</button>
-
-    @if (!string.IsNullOrEmpty(message))
-    {
-        <p style="color:red">@message</p>
-    }
 </div>
 
 @code {
-    private string email = string.Empty;
-    private string password = string.Empty;
-    private string message = string.Empty;
+    private LoginModel loginModel = new LoginModel();
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
 
     private async Task LoginAsync()
     {
         try
         {
-            var request = new
+            isLoading = true;
+            errorMessage = string.Empty;
+
+            var token = await AuthService.LoginAsync(loginModel);
+
+            if (!string.IsNullOrEmpty(token))
             {
-                Email = email,
-                Password = password
-            };
+                // Mark user as authenticated
+                await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(token);
 
-            var response = await Http.PostAsJsonAsync("http://localhost:5203/api/Auth/Login", request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var token = await response.Content.ReadAsStringAsync();
-
-                // token ni saqlaymiz (oddiy localStorage)
-                await JS.InvokeVoidAsync("localStorage.setItem", "token", token.Replace("\"", ""));
-
+                // Navigate to documents page
                 Nav.NavigateTo("/document", true);
             }
             else
             {
-                message = "Email yoki parol xato!";
+                errorMessage = "Invalid email or password!";
             }
         }
         catch (Exception ex)
         {
-            message = "Server bilan aloqa yo‘q: " + ex.Message;
+            errorMessage = $"Error connecting to server: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
-
-    [Inject]
-    public IJSRuntime JS { get; set; } = default!;
 }

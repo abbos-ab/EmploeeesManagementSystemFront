@@ -1,6 +1,6 @@
 ﻿@page "/departments"
+@attribute [Authorize(Roles = "SuperAdmin,Admin")]
 @inject HttpClient Http
-@using EmployesManagementSystemFront.Models
 <h1 class="text-center mb-4">Departments</h1>
 <a class="btn btn-primary mb-3" href="/departments/create">+ Add Department</a>
 

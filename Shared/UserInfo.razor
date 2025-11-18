@@ -1,0 +1,37 @@
+@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="user-info">
+    <AuthorizeView>
+        <Authorized>
+            <div class="d-flex align-items-center">
+                <span class="me-2">
+                    <strong>@context.User.Identity?.Name</strong>
+                </span>
+                @if (userRoles.Any())
+                {
+                    <span class="badge bg-primary">
+                        @string.Join(", ", userRoles)
+                    </span>
+                }
+            </div>
+        </Authorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    private List<string> userRoles = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userRoles = user.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+        }
+    }
+}
