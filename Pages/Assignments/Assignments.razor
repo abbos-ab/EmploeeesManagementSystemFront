@@ -1,7 +1,7 @@
 ﻿@page "/assignments"
+@attribute [Authorize(Roles = "SuperAdmin,Admin")]
 @inject HttpClient Http
 @inject NavigationManager Nav
-@using EmployesManagementSystemFront.Models
 
 <h1 class="mb-4">User Assignments Management</h1>
 

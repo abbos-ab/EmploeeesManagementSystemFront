@@ -9,35 +9,62 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Login
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="users">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Users
-            </NavLink>
-        </div>
+        <AuthorizeView>
+            <Authorized>
+                <!-- All authenticated users can see Documents -->
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="document">
+                        <span class="bi bi-file-earmark-text" aria-hidden="true"></span> Documents
+                    </NavLink>
+                </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="departments">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Departments
-            </NavLink>
-        </div>
+                <!-- SuperAdmin & Admin can see Users -->
+                <AuthorizeView Roles="SuperAdmin,Admin">
+                    <Authorized Context="userAuth">
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="users">
+                                <span class="bi bi-people-fill" aria-hidden="true"></span> Users
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="assignments">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Assignments
-            </NavLink>
-        </div>
+                <!-- SuperAdmin & Admin can see Departments -->
+                <AuthorizeView Roles="SuperAdmin,Admin">
+                    <Authorized Context="deptAuth">
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="departments">
+                                <span class="bi bi-building" aria-hidden="true"></span> Departments
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="document">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Documents
-            </NavLink>
-        </div>
+                <!-- SuperAdmin & Admin can see Assignments -->
+                <AuthorizeView Roles="SuperAdmin,Admin">
+                    <Authorized Context="assignAuth">
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="assignments">
+                                <span class="bi bi-clipboard-check" aria-hidden="true"></span> Assignments
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
+                <div class="nav-item px-3">
+                    <button class="nav-link btn btn-link" @onclick="LogoutAsync">
+                        <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Logout
+                    </button>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="bi bi-house-door-fill" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
     </nav>
 </div>
 
@@ -49,5 +76,17 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    [Inject]
+    private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private async Task LogoutAsync()
+    {
+        await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsLoggedOut();
+        NavigationManager.NavigateTo("/", true);
     }
 }

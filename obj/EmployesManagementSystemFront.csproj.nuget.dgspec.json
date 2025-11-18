@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\proects\\EmployesManagementSystemFront\\EmployesManagementSystemFront\\EmployesManagementSystemFront.csproj": {}
+    "D:\\Repos\\Demos\\Abbos\\EmploeeesManagementSystemFront\\EmployesManagementSystemFront.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\proects\\EmployesManagementSystemFront\\EmployesManagementSystemFront\\EmployesManagementSystemFront.csproj": {
+    "D:\\Repos\\Demos\\Abbos\\EmploeeesManagementSystemFront\\EmployesManagementSystemFront.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\proects\\EmployesManagementSystemFront\\EmployesManagementSystemFront\\EmployesManagementSystemFront.csproj",
+        "projectUniqueName": "D:\\Repos\\Demos\\Abbos\\EmploeeesManagementSystemFront\\EmployesManagementSystemFront.csproj",
         "projectName": "EmployesManagementSystemFront",
-        "projectPath": "C:\\Users\\Admin\\proects\\EmployesManagementSystemFront\\EmployesManagementSystemFront\\EmployesManagementSystemFront.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\proects\\EmployesManagementSystemFront\\EmployesManagementSystemFront\\obj\\",
+        "projectPath": "D:\\Repos\\Demos\\Abbos\\EmploeeesManagementSystemFront\\EmployesManagementSystemFront.csproj",
+        "packagesPath": "C:\\Users\\rahmatillo.abduqodir\\.nuget\\packages\\",
+        "outputPath": "D:\\Repos\\Demos\\Abbos\\EmploeeesManagementSystemFront\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\rahmatillo.abduqodir\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -25,7 +22,6 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -45,7 +41,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -54,6 +50,10 @@
             "Blazored.LocalStorage": {
               "target": "Package",
               "version": "[4.5.0, )"
+            },
+            "Microsoft.AspNetCore.Components.Authorization": {
+              "target": "Package",
+              "version": "[8.0.11, )"
             },
             "Microsoft.AspNetCore.Components.WebAssembly": {
               "target": "Package",
@@ -67,14 +67,18 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.11, )",
+              "version": "[8.0.22, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.0, )",
+              "version": "[9.0.11, )",
               "autoReferenced": true
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             }
           },
           "imports": [
@@ -91,7 +95,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[8.0.11, 8.0.11]"
+              "version": "[8.0.22, 8.0.22]"
             }
           ],
           "frameworkReferences": {
@@ -99,7 +103,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

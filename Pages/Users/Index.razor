@@ -1,5 +1,5 @@
 ﻿@page "/users"
-@using EmployesManagementSystemFront.Models
+@attribute [Authorize(Roles = "SuperAdmin,Admin")]
 @inject HttpClient Http
 @inject IJSRuntime JS
 

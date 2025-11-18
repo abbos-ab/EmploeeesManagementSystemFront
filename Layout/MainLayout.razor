@@ -1,11 +1,14 @@
 ﻿@inherits LayoutComponentBase
+@using EmployesManagementSystemFront.Shared
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <main>
-        <div class="top-row px-4">
+        <div class="top-row px-4 d-flex justify-content-between align-items-center">
+            <UserInfo />
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 

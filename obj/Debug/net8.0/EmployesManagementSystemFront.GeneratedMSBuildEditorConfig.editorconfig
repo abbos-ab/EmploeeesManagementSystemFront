@@ -13,77 +13,81 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = EmployesManagementSystemFront
 build_property.RootNamespace = EmployesManagementSystemFront
-build_property.ProjectDir = C:\Users\Admin\proects\EmployesManagementSystemFront\EmployesManagementSystemFront\
+build_property.ProjectDir = D:\Repos\Demos\Abbos\EmploeeesManagementSystemFront\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Admin\proects\EmployesManagementSystemFront\EmployesManagementSystemFront
+build_property.MSBuildProjectDirectory = D:\Repos\Demos\Abbos\EmploeeesManagementSystemFront
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/App.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Layout/EmptyLayout.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Layout/EmptyLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XEVtcHR5TGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Assignments/Assignments.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Assignments/Assignments.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXNzaWdubWVudHNcQXNzaWdubWVudHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Departments/Create.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Departments/Create.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwYXJ0bWVudHNcQ3JlYXRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Departments/Delete.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Departments/Delete.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwYXJ0bWVudHNcRGVsZXRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Departments/Departments.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Departments/Departments.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwYXJ0bWVudHNcRGVwYXJ0bWVudHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Departments/Edit.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Departments/Edit.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwYXJ0bWVudHNcRWRpdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Documents/Document.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Documents/Document.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdW1lbnRzXERvY3VtZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Home.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Login/Login.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Login/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Users/Create.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Users/Create.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcQ3JlYXRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Users/Edit.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Users/Edit.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcRWRpdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Pages/Users/Index.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Pages/Users/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/_Imports.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Shared/UserInfo.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFVzZXJJbmZvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Layout/MainLayout.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-oqu20a1lua
 
-[C:/Users/Admin/proects/EmployesManagementSystemFront/EmployesManagementSystemFront/Layout/NavMenu.razor]
+[D:/Repos/Demos/Abbos/EmploeeesManagementSystemFront/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-yrgqdh2sj7
